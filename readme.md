@@ -1,0 +1,9 @@
+# RA-Scripts
+
+RayAlto's Stupid Scripts
+
+## Python
+
+### [tachiyomi-sort-images](./python/tachiyomi-sort-images)
+
+A stupid python script to rename all files (excluding directories) with index numbers. Used by me to organize manually-downloaded galleries from exhentai that I put in [TachiyomiSY](https://github.com/jobobby04/tachiyomisy)
