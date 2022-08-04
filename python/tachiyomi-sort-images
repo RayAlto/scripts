@@ -19,7 +19,7 @@
 # add '-d' flag to do a dry run:
 #   $ ls
 #   baf bar foo
-#   $ tachiyomi-sort-images ./
+#   $ tachiyomi-sort-images -d ./
 #   ./baf -> ./001
 #   ./bar -> ./002
 #   ./foo -> ./003
@@ -27,11 +27,9 @@
 #   baf bar foo
 
 import os
-import random
 import stat
 import sys
 from collections.abc import Callable
-from string import ascii_letters
 
 
 def print_help() -> None:
@@ -40,10 +38,6 @@ def print_help() -> None:
     print(f'    -d,    dry-run')
     print(f'    -h,    help')
     print(f'    --no-backup')
-
-
-def random_char(count: int) -> str:
-    return ''.join([random.choice(ascii_letters) for _ in range(count)])
 
 
 def validate_dir(directory: str) -> None:
