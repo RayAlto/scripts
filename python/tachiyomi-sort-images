@@ -55,7 +55,7 @@ def list_files(directory: str) -> list[str]:
     ]
     files_with_index: dict[int | str, str] = {}
     for file in files:
-        index_match: re.Match | None = re.search(r'\d*', file)
+        index_match: re.Match | None = re.search(r'\d+', file)
         if index_match is None:
             files_with_index[file] = file
         else:
