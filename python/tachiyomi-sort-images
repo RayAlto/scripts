@@ -33,13 +33,6 @@ import sys
 from collections.abc import Callable
 
 
-def extract_number(string: str) -> str:
-    number_match: re.Match[str] | None = re.search(r'\d*', string)
-    if number_match == None:
-        return string
-    return number_match.group(0)
-
-
 def print_help() -> None:
     print(f'Usage: {sys.argv[0]} [<dir>] [-d] [-h] [--no-backup]')
     print(f'    <dir>, working directory (default: "./")')
@@ -56,11 +49,31 @@ def validate_dir(directory: str) -> None:
 
 
 def list_files(directory: str) -> list[str]:
-    result: list[str] = [
+    files: list[str] = [
         file for file in os.listdir(directory)
         if os.path.isfile(os.path.join(directory, file))
     ]
-    result.sort(key=extract_number)
+    files_with_index: dict[int | str, str] = {}
+    for file in files:
+        index_match: re.Match | None = re.search(r'\d*', file)
+        if index_match is None:
+            files_with_index[file] = file
+        else:
+            file_index: int = int(index_match.group(0))
+            if files_with_index.get(file_index) is not None:
+                files_with_index[file] = file
+            else:
+                files_with_index[file_index] = file
+    max_index_digits: int = len(
+        str(max([i for i in files_with_index.keys() if type(i) is int])))
+    sorted_files: dict[str, str] = {}
+    for index, file in files_with_index.items():
+        if type(index) is int:
+            sorted_files[str(index).zfill(max_index_digits)] = file
+        elif type(index) is str:
+            sorted_files[index] = file
+    sorted_files = dict(sorted(sorted_files.items()))
+    result: list[str] = [file for file in sorted_files.values()]
     return result
 
 
