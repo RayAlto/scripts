@@ -1,0 +1,60 @@
+#!/usr/bin/python
+
+# Example:
+#
+# before:
+#   $ tree 001
+#   001
+#   ├── 011
+#   │   ├── a
+#   │   ├── b
+#   │   └── c
+#   ├── 012
+#   │   ├── a
+#   │   ├── b
+#   │   └── c
+#   └── 013
+#       ├── 1
+#       ├── 2
+#       └── 3
+#
+# run 'expand-directory 001' , after:
+#   $ tree 001
+
+import os
+import shutil
+import sys
+
+
+def validate_dir(directory: str) -> None:
+    if not os.path.isdir(directory):
+        print(f'{sys.argv[0]}: "{directory}" is not a directory',
+              file=sys.stderr)
+        sys.exit(1)
+
+
+def list_files(directory: str) -> list[str]:
+    result: list[str] = []
+    for root, _, files in os.walk(directory):
+        for file in files:
+            result.append(os.path.relpath(os.path.join(root, file), directory))
+    return result
+
+
+def expand_directories(directory: str, files: list[str]) -> None:
+    for file in files:
+        file_name: str = os.path.join(directory, file)
+        new_file_name: str = os.path.join(
+            directory,
+            file.replace(' ', '_').replace('-',
+                                           '_').replace('\u3000',
+                                                        '_').replace('/', '-'))
+        shutil.copy(file_name, new_file_name)
+
+
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print(f'Usage: {sys.argv[0]} <dir>')
+        sys.exit(1)
+    validate_dir(sys.argv[1])
+    expand_directories(sys.argv[1], list_files(sys.argv[1]))
