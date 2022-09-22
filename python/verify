@@ -23,9 +23,7 @@ def verify_video(video_file: str) -> tuple[bool, str]:
         if not video.isOpened():
             return (False, 'Failed to open video')
         while video.isOpened():
-            ok, _ = video.read()
-            if not ok:
-                return (False, 'Empty frame detected')
+            video.read()
         return (True, 'ok')
     except Exception as e:
         return (False, str(e))
@@ -92,4 +90,5 @@ if __name__ == '__main__':
     for task in tasks:
         results.append(verify(task))
     with open('.verify.log', 'w') as log:
-        log.writelines([result for result in results if result is not None])
+        log.writelines(
+            [f'{result}\n' for result in results if result is not None])
