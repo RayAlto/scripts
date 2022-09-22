@@ -11,3 +11,7 @@ A stupid python script to rename all files (excluding directories) with index nu
 ### [expand-directories](./python/expand-directory)
 
 A stupid python script to expand directory structure
+
+### [vefiry](./python/verify)
+
+A stupid python script to verify if file is broken
