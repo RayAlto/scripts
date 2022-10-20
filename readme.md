@@ -14,4 +14,4 @@ A stupid python script to expand directory structure
 
 ### [vefiry](./python/verify)
 
-A stupid python script to verify if file is broken
+A stupid python script to verify if image/video/zip file is broken
