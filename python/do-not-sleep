@@ -1,0 +1,57 @@
+#!/usr/bin/python
+
+# Example:
+#   $ do-not-sleep 120 /mnt/hdd1 /mnt/ssd1
+#   [2022-13-32 25:61:61] Tick! (/mnt/hdd1)
+#   [2022-13-32 25:61:61] Tick! (/mnt/ssd1)
+#   [2022-13-32 25:63:61] Tock! (/mnt/hdd1)
+#   [2022-13-32 25:63:61] Tock! (/mnt/ssd1)
+
+import datetime
+import os
+import random
+import sys
+import time
+
+TEMP_FILE_NAME: str = '.do-not-sleep'
+
+
+def print_help_and_exit(message: str | None = None) -> None:
+    if message is not None:
+        print(message, file=sys.stderr)
+    print(f'Usage: {sys.argv[0]} [interval] [directories]...', file=sys.stderr)
+    sys.exit()
+
+
+def datetime_str() -> str:
+    return datetime.datetime.now().isoformat(' ', 'seconds')
+
+
+def tick_tock(directory: str) -> None:
+    temp_file_dir: str = os.path.join(directory, TEMP_FILE_NAME)
+    if os.path.isdir(temp_file_dir):
+        print_help_and_exit(f'"{temp_file_dir}" is a directory')
+    if not os.path.isfile(temp_file_dir) or os.path.getsize(
+            temp_file_dir) == 0:
+        with open(temp_file_dir, 'wb') as temp_file:
+            print(f'[{datetime_str()}] Tick! ({directory})')
+            temp_file.write(random.randbytes(16))
+    else:
+        with open(temp_file_dir, 'w') as temp_file:
+            print(f'[{datetime_str()}] Tock! ({directory})')
+            temp_file.close()
+
+
+if __name__ == '__main__':
+    if not sys.argv[1].isnumeric():
+        print_help_and_exit(f'Interval "{sys.argv[1]}" is not an integer!')
+    interval: int = int(sys.argv[1])
+    directories: list[str] = []
+    for arg in sys.argv[2:]:
+        if not os.path.isdir(arg):
+            print_help_and_exit(f'Directory "{arg}" is not a directory')
+        directories.append(arg)
+    while True:
+        for directory in directories:
+            tick_tock(directory)
+        time.sleep(interval)

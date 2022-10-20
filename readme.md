@@ -15,3 +15,7 @@ A stupid python script to expand directory structure
 ### [vefiry](./python/verify)
 
 A stupid python script to verify if image/video/zip file is broken
+
+### [do-not-sleep](./python/do-not-sleep)
+
+A stupid python script to prevent strange storage device from sleep
