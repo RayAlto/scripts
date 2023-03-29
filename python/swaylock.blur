@@ -1,0 +1,43 @@
+#!/usr/bin/python
+
+import cv2
+import subprocess
+import json
+import sys
+
+TEMP_IMG: str = '/tmp/swaylock.blur'
+BLUR_SIZE: int = 23
+LOCK_CUSTOM_ARGS: list[str] = [
+    '-e', '-F', '-l', '--font', 'Victor Mono Nerd Font', '--indicator-radius',
+    '64'
+]
+
+
+def lock() -> None:
+    outputs: list[dict] = json.loads(
+        subprocess.run(['swaymsg', '-t', 'get_outputs'],
+                       capture_output=True).stdout)
+    active_outputs: list[str] = [
+        output['name'] for output in outputs if output['active']
+    ]
+    lock_args: list[str] = ['swaylock']
+    lock_args.extend(LOCK_CUSTOM_ARGS)
+    lock_args.extend(sys.argv[1:])
+    for output in active_outputs:
+        img_dir: str = f'{TEMP_IMG}.{output}'
+        subprocess.run(['grim', '-o', output, img_dir])
+        img = cv2.imread(img_dir)
+        blurred = cv2.GaussianBlur(img, (BLUR_SIZE, BLUR_SIZE), 0)
+        _, buf = cv2.imencode('.png', blurred)
+        buf.tofile(img_dir)
+        lock_args.extend(['-i', f'{output}:{img_dir}'])
+    subprocess.run(lock_args)
+
+
+if __name__ == '__main__':
+    try:
+        lock()
+    except Exception as e:
+        print(f'Failed to lock with blur:\n{e}', file=sys.stderr)
+        print('Locking with default params', file=sys.stderr)
+        subprocess.run('swaylock')
