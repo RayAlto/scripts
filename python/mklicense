@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+
+# generate licenses
+#
+# Example:
+#   $ mklicense -t GPLV3 -y 2024 -b 'A free and open source software' -an RayAlto -pn Foo
+
+import requests
+import argparse
+import datetime
+
+
+def gen_gplv3(args: argparse.Namespace) -> str:
+    gplv3_response: requests.Response = requests.get(
+        url='https://www.gnu.org/licenses/gpl-3.0.txt',
+        headers={
+            'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.69/70 Safari/537.36'
+        })
+    gplv3_response.raise_for_status()
+    return gplv3_response.text.replace(
+        '<one line to give the program\'s name and a brief idea of what it does.>',
+        args.brief).replace('<year>', args.year).replace(
+            '<name of author>',
+            args.author_name).replace('<program>', args.program_name)
+
+
+GENERATORS: dict = {'GPLV3': gen_gplv3}
+
+if __name__ == '__main__':
+
+    args_parser = argparse.ArgumentParser(description='License generator')
+    args_parser.add_argument('-t',
+                             '--type',
+                             type=str,
+                             help='type of license',
+                             default=f'{list(GENERATORS.keys())[0]}',
+                             choices=GENERATORS.keys())
+    args_parser.add_argument('-y',
+                             '--year',
+                             type=str,
+                             help='year of license',
+                             default=f'{datetime.date.today().year}')
+    args_parser.add_argument(
+        '-b',
+        '--brief',
+        type=str,
+        required=True,
+        help=
+        'one line to give the program\'s name and a brief idea of what it does'
+    )
+    args_parser.add_argument('-an',
+                             '--author-name',
+                             type=str,
+                             required=True,
+                             help='name of author')
+    args_parser.add_argument('-pn',
+                             '--program-name',
+                             type=str,
+                             required=True,
+                             help='name of program')
+    args_parser.add_argument('-o',
+                             '--output',
+                             type=str,
+                             required=True,
+                             help='output file name')
+    args = args_parser.parse_args()
+
+    with open(args.output, 'w') as out_file:
+        out_file.write(GENERATORS[args.type](args))

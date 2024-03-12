@@ -4,6 +4,14 @@ RayAlto's Stupid Scripts
 
 ## Python
 
+### [mklicense](./python/mklicense)
+
+A stupid license generator
+
+### [hypr-toggle-monitors](./python/hypr.toggle.monitors)
+
+A stupid python script to toggle all monitors in [Hyprland](https://hyprland.org)
+
 ### [tachiyomi-sort-images](./python/tachiyomi-sort-images)
 
 A stupid python script to rename all files (excluding directories) with index numbers. Used by me to organize manually-downloaded galleries from exhentai that I put in [TachiyomiSY](https://github.com/jobobby04/tachiyomisy)
