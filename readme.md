@@ -2,6 +2,12 @@
 
 RayAlto's Stupid Scripts
 
+## CMake
+
+### [TargetDefineRelativeFile](./cmake/TargetDefineRelativeFile.cmake)
+
+A stupid CMake module to add a relative path version of the `__FILE__` macro named `__REL_FILE__` to all source files of the target.
+
 ## Python
 
 ### [mklicense](./python/mklicense)

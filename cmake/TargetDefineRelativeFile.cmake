@@ -1,0 +1,12 @@
+# Add a relative path version of the __FILE__ macro named __REL_FILE__ to all source files of the target.
+function(target_define_relative_file target_name)
+  get_target_property(target_srcs "${target_name}" SOURCES)
+  foreach(target_src ${target_srcs})
+    if(IS_ABSOLUTE ${target_src})
+      file(RELATIVE_PATH target_src_relpath ${PROJECT_SOURCE_DIR} ${target_src})
+    else()
+      set(target_src_relpath ${target_src})
+    endif()
+    set_source_files_properties(${target_src} PROPERTIES COMPILE_DEFINITIONS "__REL_FILE__=\"${target_src_relpath}\"")
+  endforeach()
+endfunction()
