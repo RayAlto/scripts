@@ -2,6 +2,12 @@
 
 RayAlto's Stupid Scripts
 
+## Shell
+
+### [Waydroid Path](./shell/waydroid.patch.sh)
+
+A patch makes gaming on waydroid possible (e.g. BlueArchive global version).
+
 ## CMake
 
 ### [TargetDefineRelativeFile](./cmake/TargetDefineRelativeFile.cmake)
