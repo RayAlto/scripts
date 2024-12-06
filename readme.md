@@ -16,7 +16,7 @@ A stupid CMake module to add a relative path version of the `__FILE__` macro nam
 
 ## Python
 
-### [](./python/pip.upgrade.all)
+### [pip.upgrade.all](./python/pip.upgrade.all)
 
 A stupid scripy to upgrade all pip packages
 
