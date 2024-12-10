@@ -31,17 +31,17 @@ fi
 }
 
 function patch_hex() {
-# file path, ghidra offset, original hex, new hex, skip offset
-file_offset=$(($2 - $5))
-if check_hex $1 $2 $3 $5; then
-  hexinbin=$(printf $4 | xxd -r -p)
-  echo -n $hexinbin | dd of=$1 seek=$file_offset bs=1 conv=notrunc;
-  echo "Patched $1 at $file_offset with new hex $4"
-elif check_hex $1 $2 $4 $5; then
-  echo "Already patched"
-else
-  echo "Hex mismatch!"
-fi
+  # file path, ghidra offset, original hex, new hex, skip offset
+  file_offset=$(($2 - $5))
+  if check_hex $1 $2 $3 $5; then
+    hexinbin=$(printf $4 | xxd -r -p)
+    echo -n $hexinbin | dd of=$1 seek=$file_offset bs=1 conv=notrunc;
+    echo "Patched $1 at $file_offset with new hex $4"
+  elif check_hex $1 $2 $4 $5; then
+    echo "Already patched"
+  else
+    echo "Hex mismatch!"
+  fi
 }
 
 if [ -f $HOUDINI_PATH ]; then
