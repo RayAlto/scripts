@@ -20,6 +20,10 @@ A stupid CMake module to add a relative path version of the `__FILE__` macro nam
 
 A stupid scripy to upgrade all pip packages
 
+### [grim.slurp.tesseract.chi_sim](./python/grim.slurp.tesseract.chi_sim)
+
+调用 `grim -g "$(slurp)" - | tesseract - - -l eng+chi_sim` 并处理结果中多余的空格和 `\n` （比如汉字之间不需要空格，中英连接处、英文单词间则需要空格）
+
 ### [mklicense](./python/mklicense)
 
 A stupid license generator

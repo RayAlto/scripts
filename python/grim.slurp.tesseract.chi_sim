@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+
+import subprocess
+
+COMMAND_GRIM_SLUPR_TESSERACT_CHISIM: str = 'grim -g "$(slurp)" - | tesseract - - -l eng+chi_sim'
+
+if __name__ == '__main__':
+  result = subprocess.run(COMMAND_GRIM_SLUPR_TESSERACT_CHISIM,
+                          shell=True,
+                          capture_output=True)
+  if result.returncode != 0:
+    print(result.stderr.decode())
+    exit(result.returncode)
+  trimmed, *result = result.stdout.decode().split()
+  for block in result:
+    if trimmed[-1].isascii() or block[0].isascii():
+      trimmed += ' '
+    trimmed += block
+  print(trimmed)
