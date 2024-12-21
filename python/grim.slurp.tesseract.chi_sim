@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import subprocess
+import sys
 
 COMMAND_GRIM_SLUPR_TESSERACT_CHISIM: str = 'grim -g "$(slurp)" - | tesseract - - -l eng+chi_sim'
 
@@ -9,7 +10,7 @@ if __name__ == '__main__':
                           shell=True,
                           capture_output=True)
   if result.returncode != 0:
-    print(result.stderr.decode())
+    print(result.stderr.decode(), file=sys.stderr)
     exit(result.returncode)
   trimmed, *result = result.stdout.decode().split()
   for block in result:
