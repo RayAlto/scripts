@@ -15,9 +15,10 @@ if __name__ == '__main__':
   if len(res.stdout) == 0:
     exit()
   print(res.stdout.decode(), end='\n\n')
-  res = res.stdout.splitlines()[2:]
-  for i in res:
-    command = [*COMMAND_UPGRADE_PACKAGE, i.split()[0].decode()]
-    print(f'> {" ".join(command)}')
-    subprocess.run(command)
-    print()
+  command = [
+      *COMMAND_UPGRADE_PACKAGE,
+      *[i.split()[0].decode() for i in res.stdout.splitlines()[2:]]
+  ]
+  print(f'> {" ".join(command)}')
+  subprocess.run(command)
+  print()
